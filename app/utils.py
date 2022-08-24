@@ -62,6 +62,8 @@ def cluster_docs(index, k=1.5, b=0.75, n_centers=500, save=True, save_path=os.pa
 
 	
 def design_output(text_results, words_to_highlight):
+    if len(text_results)==0:
+        return '''<div>No result found</div>'''
     words_to_highlight=list(map(lambda x: x.lower().strip(), words_to_highlight))
     template= '''<div> <br>'''
     for pos, (text, url, title) in enumerate(text_results):
