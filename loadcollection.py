@@ -5,7 +5,6 @@ from tqdm import tqdm
 import os
 import gzip
 from lxml import etree
-import time
 import random as rd
 
 # Taken and adapted from https://github.com/bartdegoede/python-searchengine/blob/master/load.py
