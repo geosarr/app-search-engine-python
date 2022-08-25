@@ -5,7 +5,7 @@ sys.path.append(one_level_up)
 from search_models import BM25 
 from saveload import read_pickle, indexing, to_pickle
 from numpy import random as rd
-from numpy import mean, log10
+from numpy import mean, log10, Inf
 from tqdm import tqdm
 import streamlit as st
 
@@ -20,7 +20,7 @@ def get_model(top=100):
         except Exception as e:
             print(f"\nFailed to load the data : {e}")
     else:
-        index, _ = indexing(dataset="wiki", save_load_path=data_dir, index_type="inv", nb_docs=int(5e5))
+        index, _ = indexing(dataset="wiki", save_load_path=data_dir, index_type="inv", nb_docs=int(1e5))
     model=BM25(index=index, top=top)
     return model
 
@@ -35,7 +35,7 @@ def cluster_docs(index, k=1.5, b=0.75, n_centers=500, save=True, save_path=os.pa
         clusters={ID: set() for ID in centers}
 
         for doc_id in tqdm(doc_ids, desc="Document clustering"):
-            doc_score, clust=0,0
+            doc_score, clust=-Inf,0
             doc_terms=set(index.raw_freq[doc_id].keys())
             for c in centers:
                 overlap_terms = doc_terms.intersection(set(centers_terms[c]))
