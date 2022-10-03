@@ -100,6 +100,22 @@ def empty_result():
 def display_duration(duration: float) -> str:
     return f"<div>The search took {round(duration,3)} second(s)</div>"
 
+def previous_button(previous, page_number: int) -> int:
+    if previous.button("Previous"):
+        if page_number - 1 <= 0:
+            page_number = 0
+        else:
+            page_number -= 1
+    return page_number
+
+def next_button(next_, final_page: int, page_number: int) -> int:
+    if next_.button("Next"):
+        if page_number + 1 >= final_page:
+            page_number = final_page
+        else:
+            page_number += 1
+    return page_number
+
 def pagination(page_number: int, results: list) -> int:
     if len(results) == 0:
         # no pagination
@@ -108,23 +124,29 @@ def pagination(page_number: int, results: list) -> int:
     # paginate otherwise        
     final_page = len(results) // MAX_NUMBER_RESULTS_PER_PAGE
 
-    prev, _, __, ___, center , ____, ____, ______, next = st.columns(9)
+    previous, _, __, first_page, center , ____, ____, ______, next_ = st.columns(9)
 
 
     with center:
         st.write(f"Page {page_number+1}")
 
-    if next.button("Next"):
-        if page_number + 1 > final_page:
-            page_number = final_page
-        else:
-            page_number += 1
+    if len(results)>MAX_NUMBER_RESULTS_PER_PAGE:
+        # there are at least two pages
+        if page_number == 0:
+            # only show the next button
+            page_number=next_button(next_, final_page, page_number)
 
-    if prev.button("Previous"):
-        if page_number - 1 < 0:
-            page_number = 0
+        elif page_number < final_page:
+            # show next and previous buttons
+            page_number=next_button(next_, final_page, page_number)
+
+            page_number=previous_button(previous, page_number)
+
+            if first_page.button("<< 1"):
+                page_number=0
         else:
-            page_number -= 1
+            # only show the previous button
+            page_number=previous_button(previous, page_number)
     
     return page_number
 
