@@ -4,7 +4,7 @@ from loadcollection import load_collection_wiki_abstract
 from indices import InvertedIndex
 import pickle
 import os
-from config import * 
+from constants import * 
 
 def to_pickle(obj, name, path='./data'):
     '''
